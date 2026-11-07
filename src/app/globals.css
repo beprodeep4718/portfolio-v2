@@ -1,26 +1,298 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
+/* Dark mode follows the data-theme attribute set before paint in layout.tsx */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ------------------------------------------------------------------
+   Identity: a lamp that goes deep into the stack.
+   Light is paper and ink; dark is deep night. The lamp is constant.
+------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --lamp: #ff7a1a;
+  --lamp-deep: #ad5312;
+  --lamp-glow: rgba(255, 122, 26, 0.67);
+
+  --bg: #ffffff;
+  --ink: #0b0b0c;
+  --muted: #5e6066;
+  --line: #e4e4e4;
+  --rule: #0b0b0c;
+  --btn: #0b0b0c;
+  --btn-hover: #2b2d33;
+  --btn-ink: #ffffff;
+  --row-open: #fff4ec;
+  --row-hover: #f7f7f7;
+  --bar: #0b0b0c;
+  --bar-off: #e1e1e1;
+  --halo: rgba(255, 122, 26, 0.11);
+  --focus: #0b0b0c;
+
+  /* Stack layers get darker as they go deeper */
+  --l1: #f3f4f5;
+  --l1-ink: #0b0b0c;
+  --l1-muted: #5e6066;
+  --l2: #e3e5e8;
+  --l2-ink: #0b0b0c;
+  --l2-muted: #555960;
+  --l3: #20242c;
+  --l3-ink: #edebe7;
+  --l3-muted: #a2a7b1;
+  --l4: #0b0b0c;
+  --l4-ink: #edebe7;
+  --l4-muted: #9ea3ac;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #07090e;
+  --ink: #edebe7;
+  --muted: #8e95a3;
+  --line: #232834;
+  --rule: #edebe7;
+  --btn: #ff7a1a;
+  --btn-hover: #ff9442;
+  --btn-ink: #07090e;
+  --row-open: rgba(255, 122, 26, 0.08);
+  --row-hover: rgba(237, 235, 231, 0.04);
+  --bar: #edebe7;
+  --bar-off: #2a303c;
+  --halo: rgba(255, 122, 26, 0.2);
+  --focus: #ff7a1a;
+
+  --l1: #10141c;
+  --l1-ink: #edebe7;
+  --l1-muted: #8e95a3;
+  --l2: #0c1017;
+  --l2-ink: #edebe7;
+  --l2-muted: #8e95a3;
+  --l3: #080b11;
+  --l3-ink: #edebe7;
+  --l3-muted: #8e95a3;
+  --l4: #030406;
+  --l4-ink: #edebe7;
+  --l4-muted: #8e95a3;
+
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-rule: var(--rule);
+  --color-btn: var(--btn);
+  --color-btn-hover: var(--btn-hover);
+  --color-btn-ink: var(--btn-ink);
+  --color-row-open: var(--row-open);
+  --color-row-hover: var(--row-hover);
+  --color-bar: var(--bar);
+  --color-bar-off: var(--bar-off);
+  --color-lamp: var(--lamp);
+
+  --color-l1: var(--l1);
+  --color-l1-ink: var(--l1-ink);
+  --color-l1-muted: var(--l1-muted);
+  --color-l2: var(--l2);
+  --color-l2-ink: var(--l2-ink);
+  --color-l2-muted: var(--l2-muted);
+  --color-l3: var(--l3);
+  --color-l3-ink: var(--l3-ink);
+  --color-l3-muted: var(--l3-muted);
+  --color-l4: var(--l4);
+  --color-l4-ink: var(--l4-ink);
+  --color-l4-muted: var(--l4-muted);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  --default-transition-duration: 300ms;
+}
+
+/* ------------------------------------------------------------------
+   Type: Inter Tight for everything, JetBrains Mono for readouts only
+------------------------------------------------------------------- */
+@utility display-name {
+  font-size: clamp(72px, 13.4vw, 212px);
+  line-height: 0.84;
+  letter-spacing: -0.065em;
+  font-weight: 700;
+}
+@utility display-contact {
+  font-size: clamp(72px, 12vw, 192px);
+  line-height: 0.86;
+  letter-spacing: -0.065em;
+  font-weight: 700;
+}
+@utility display-section {
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+}
+@utility display-layer {
+  font-size: clamp(32px, 3.6vw, 48px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+@utility type-lead {
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+@utility type-statement {
+  font-size: clamp(20px, 1.8vw, 24px);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+}
+@utility type-row {
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 650;
+}
+@utility type-item {
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+}
+@utility type-body-lg {
+  font-size: 19px;
+  line-height: 1.5;
+}
+@utility type-body {
+  font-size: 17px;
+  line-height: 1.55;
+}
+@utility type-body-sm {
+  font-size: 16px;
+  line-height: 1.5;
+}
+@utility type-small {
+  font-size: 15px;
+  line-height: 1.5;
+}
+@utility type-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------
+   The lamp
+------------------------------------------------------------------- */
+/* Sized in em: use inside headings, where it is the full stop */
+@utility lamp {
+  display: inline-block;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 34% 30%, #fff3e0 0%, var(--lamp) 46%, var(--lamp-deep) 100%);
+  box-shadow:
+    0 0 0.3em var(--lamp-glow),
+    0 0 1.1em var(--halo);
+}
+/* Small fixed size dots */
+@utility lamp-dot {
+  display: inline-block;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 34% 30%, #fff3e0 0%, var(--lamp) 46%, var(--lamp-deep) 100%);
+  box-shadow:
+    0 0 12px var(--lamp-glow),
+    0 0 44px var(--halo);
+}
+/* Letters warm up where the lamp is (positions set from JS) */
+@utility lit-text {
+  color: transparent;
+  background-image: radial-gradient(
+    1.15em circle at var(--lx, -9999px) var(--ly, -9999px),
+    #fff1e0 0%,
+    var(--lamp) 32%,
+    rgba(255, 122, 26, 0) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  @media (width >= 48rem) {
+    padding-inline: 32px;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 40px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility focus-ring {
+  outline: none;
+  &:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+    transition:
+      background-color 400ms var(--ease-smooth),
+      color 400ms var(--ease-smooth);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--lamp);
+    color: #07090e;
+  }
+
+  section[id] {
+    scroll-margin-top: 88px;
+  }
+
+  em,
+  i {
+    font-style: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
 }
