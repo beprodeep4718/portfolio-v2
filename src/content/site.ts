@@ -81,38 +81,63 @@ export const projects: Project[] = [
     code: "https://github.com/beprodeep4718/chat-app",
     image: { src: "/work/chatrix.png", alt: "Chatrix sign up screen with name, email and password fields" },
   },
-  {
-    slug: "bharat-blog",
-    title: "Bharat Blog",
-    what: "Blogging platform with an admin area, rendered on the server",
-    detail:
-      "Writers create, edit and delete posts from an admin area. Pages render on the server with EJS, so they load fast.",
-    stack: "Node.js, Express, MongoDB and EJS",
-    depth: 3,
-    live: "https://blog-website-4ueh.onrender.com/",
-    code: "https://github.com/beprodeep4718/Blog-website",
-    image: { src: "/work/blog.png", alt: "Bharat Blog home page with a welcome heading over a typewriter photo" },
-  },
-  {
-    // TODO: add live link, code link and a screenshot
-    slug: "anjusa",
-    title: "Anjusa Academy",
-    what: "Platform for an art and computer academy",
-    detail:
-      "Artists submit artwork, admins publish notices and manage users, and every route checks the role of whoever is asking.",
-    stack: "React, Express, MongoDB, Cloudinary and JWT",
-    depth: 3,
-  },
-  {
-    // TODO: add live link, code link and a screenshot
-    slug: "early2code",
-    title: "Early2Code",
-    what: "Site for a coding school for kids",
-    detail: "A Next.js App Router site for a school that prepares kids for careers in AI and tech.",
-    stack: "Next.js, React, TypeScript and Zustand",
-    depth: 1,
-  },
 ];
+
+/** The featured project: shown with its architecture, above the index */
+export const featured = {
+  slug: "parsr",
+  title: "Parsr",
+  kicker: "Featured project",
+  summary:
+    "A CSV ingestion platform that streams files row by row, queues the work on BullMQ and Redis, validates every row and writes to MongoDB in batches, so even huge files never block the API.",
+  depth: 4 as const,
+  code: "https://github.com/beprodeep4718/StreamIngest",
+  stack: "Next.js, Tailwind CSS, Node.js, Express, BullMQ, Redis, MongoDB and Server Sent Events",
+  metrics: [
+    { value: "802,028", label: "rows in one job, all validated" },
+    { value: "~9 s", label: "for 100,000 rows" },
+    { value: "~150 MB", label: "peak memory at 100,000 rows" },
+    { value: "500–1,000", label: "rows per bulkWrite" },
+  ],
+  steps: [
+    { title: "Upload", body: "The client sends the CSV; the Express API checks it and replies at once." },
+    { title: "Queue", body: "A BullMQ job on Redis takes the work off the request." },
+    { title: "Stream", body: "A worker reads the file with csv-parser, a few rows at a time." },
+    { title: "Validate", body: "Three layers: structure, data rules, then business rules." },
+    { title: "Write", body: "bulkWrite batches of 500 to 1,000; invalid rows kept with reasons." },
+    { title: "Watch", body: "Progress lives in Redis and streams to the dashboard over SSE." },
+  ],
+  shots: [
+    {
+      src: "/work/streamingest/img4.png",
+      width: 1907,
+      height: 808,
+      alt: "Parsr upload screen with a drop zone for CSV files up to 100 MB",
+      caption: "Upload, up to 100 MB",
+    },
+    {
+      src: "/work/streamingest/img6.png",
+      width: 1078,
+      height: 689,
+      alt: "Parsr job execution panel showing 802,028 of 802,028 rows processed, all of them valid",
+      caption: "802,028 rows, none invalid",
+    },
+    {
+      src: "/work/streamingest/img5.png",
+      width: 1903,
+      height: 820,
+      alt: "Parsr analytics dashboard with 802,028 users, 25 upload sessions and an 84% completion rate",
+      caption: "Pipeline health dashboard",
+    },
+    {
+      src: "/work/streamingest/img3.png",
+      width: 1919,
+      height: 827,
+      alt: "Parsr landing page reading CSV processing made simple, with upload and analytics cards",
+      caption: "Landing page",
+    },
+  ],
+};
 
 export const layers = [
   { depth: "01", title: "Interface", what: "What people see and touch.", tools: "Next.js, React, TypeScript, Tailwind CSS and GSAP" },

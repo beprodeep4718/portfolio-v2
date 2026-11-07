@@ -3,23 +3,12 @@
 import Image from "next/image";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { projects, type Project } from "@/content/site";
+import { projects } from "@/content/site";
 import { cn } from "@/lib/cn";
+import { DepthBars } from "@/components/ui/depth-bars";
+import { Featured } from "./featured";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-
-function DepthBars({ depth }: { depth: Project["depth"] }) {
-  return (
-    <span role="img" aria-label={`Reaches ${depth} of 4 stack layers`} className="inline-flex shrink-0 gap-1 self-center">
-      {[1, 2, 3, 4].map((n) => (
-        <span
-          key={n}
-          className={cn("h-1.5 w-3.5 rounded-[1px] transition-colors duration-300", n <= depth ? "bg-bar" : "bg-bar-off")}
-        />
-      ))}
-    </span>
-  );
-}
 
 function Sign({ open }: { open: boolean }) {
   return (
@@ -46,10 +35,14 @@ export function Work() {
           Shipped
         </h2>
         <p className="type-small max-w-[420px] text-muted">
-          Open a row to see the work. The four bars show how far down the stack each project goes.
+          The featured build comes first, with how it works inside. The four bars show how far down the stack each
+          project goes.
         </p>
       </div>
 
+      <Featured />
+
+      <h3 className="type-item mt-10 text-ink">More work</h3>
       <ol className="border-t border-rule">
         {projects.map((p, i) => {
           const isOpen = open === p.slug;
