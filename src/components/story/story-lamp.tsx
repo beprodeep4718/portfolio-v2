@@ -50,6 +50,8 @@ export function StoryLamp() {
       const html = document.documentElement;
       const main = document.getElementById("main");
       const dockEl = document.querySelector<HTMLElement>('[data-dock="contact"]');
+      /* What the lamp lights when it lands (the photo beside Say hello) */
+      const litEls = Array.from(document.querySelectorAll<HTMLElement>("[data-lamp-lit]"));
       const geo: Geometry = { chapters: [], layers: [], dock: null, max: 0 };
 
       /* A pinned section is measured by the spacer that holds its place */
@@ -125,6 +127,17 @@ export function StoryLamp() {
         set(d, "do", "opacity", (1 - land).toFixed(3));
         if (dockEl) set(dockEl, "dock", "opacity", land.toFixed(3));
 
+        /* Over the second half of the landing the photo comes out of the dark, lit from the lamp's side */
+        const rise = clamp01((p3 - 0.5) / 0.5);
+        const lit = (rise * rise * (3 - 2 * rise)).toFixed(3);
+        litEls.forEach((el, i) => {
+          set(el, `lit${i}`, "--lit", lit);
+          if (p3 <= 0) return;
+          const b = el.getBoundingClientRect();
+          set(el, `lx${i}`, "--lx", `${(((x - b.left) / b.width) * 100).toFixed(1)}%`);
+          set(el, `ly${i}`, "--ly", `${(((ly - b.top) / b.height) * 100).toFixed(1)}%`);
+        });
+
         const railOn = left >= 32 ? on.toFixed(3) : "0";
         set(r, "rt", "transform", `translateX(${railX - 0.5}px)`);
         set(r, "ro", "opacity", railOn);
@@ -194,6 +207,7 @@ export function StoryLamp() {
         delete html.dataset.story;
         lampStore.final.active = false;
         if (dockEl) dockEl.style.opacity = "";
+        for (const el of litEls) for (const prop of ["--lit", "--lx", "--ly"]) el.style.removeProperty(prop);
         for (const el of [h, r, t, l, d]) el.removeAttribute("style");
         l.textContent = "";
       };

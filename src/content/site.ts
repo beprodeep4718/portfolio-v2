@@ -17,6 +17,17 @@ export const site = {
   /** TODO: the email you want people to use. Until it is set, contact buttons open LinkedIn. */
   email: "" as string,
 
+  /**
+   * TODO: your photo, shown beside the contact details and lit by the lamp as it lands.
+   * Put it in /public (upright, about 4:5, at least 1200px wide) and set src, e.g. "/me.jpg".
+   * Until src is set, no photo is shown.
+   */
+  photo: {
+    src: "" as string,
+    alt: "Portrait of Beprodeep Das",
+    caption: "Beprodeep Das · Jalpaiguri, West Bengal",
+  },
+
   socials: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/beprodeep-das-095043290", icon: "linkedin" },
     { label: "GitHub", href: "https://github.com/beprodeep4718", icon: "github" },

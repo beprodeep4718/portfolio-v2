@@ -24,8 +24,9 @@ npm run dev
 All copy, projects, layers and links live in `src/content/site.ts`. A new tool in `layers` also needs its logo added in `src/components/ui/tech-logo.tsx`. Before launch, fill in the `TODO` items:
 
 1. `email`: until it is set, the contact button opens LinkedIn.
-2. `now.items` → `Learning`: left empty, the row is hidden.
-3. Set `NEXT_PUBLIC_SITE_URL` to the real domain.
+2. `photo.src`: your photo in `/public` (upright, about 4:5, at least 1200px wide). It sits beside the contact details, dark until the lamp lands on Say hello, then lit from the lamp's side. Left empty, no photo is shown.
+3. `now.items` → `Learning`: left empty, the row is hidden.
+4. Set `NEXT_PUBLIC_SITE_URL` to the real domain.
 
 Colors for both themes are CSS variables at the top of `src/app/globals.css`.
 

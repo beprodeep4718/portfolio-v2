@@ -253,6 +253,31 @@
   opacity: 0;
 }
 
+/* A photo lit by the story lamp. --lit runs from 0 (in the dark) to 1 (lit) and
+   --lx/--ly is where the lamp is; the story lamp sets all three as it lands.
+   Without it (reduced motion, no script) the photo simply shows lit. */
+@utility lamp-photo {
+  --lit: 1;
+  --lx: 0%;
+  --ly: 0%;
+}
+@utility lamp-photo-image {
+  filter: brightness(calc(0.12 + 0.88 * var(--lit))) saturate(calc(0.15 + 0.85 * var(--lit)));
+}
+@utility lamp-photo-warm {
+  background: radial-gradient(
+    circle at var(--lx) var(--ly),
+    rgba(255, 176, 102, 0.85) 0%,
+    rgba(255, 122, 26, 0.3) 34%,
+    rgba(255, 122, 26, 0) 70%
+  );
+  mix-blend-mode: soft-light;
+  opacity: calc(0.1 + 0.8 * var(--lit));
+}
+@utility lamp-photo-shade {
+  box-shadow: inset 0 0 140px rgba(0, 0, 0, calc(0.78 - 0.5 * var(--lit)));
+}
+
 @utility container-page {
   width: 100%;
   max-width: 1320px;
