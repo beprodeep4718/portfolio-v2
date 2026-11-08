@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# figure build output
+figures/parsr/shots/
+figures/parsr/*.html

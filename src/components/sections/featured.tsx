@@ -2,14 +2,14 @@ import Image from "next/image";
 import { featured } from "@/content/site";
 import { buttonClass } from "@/components/ui/button";
 import { DepthBars } from "@/components/ui/depth-bars";
-import { IngestDiagram } from "./ingest-diagram";
+import { ParsrFigure } from "@/components/parsr/parsr-figure";
 
 export function Featured() {
   return (
     <article
       id={`work-${featured.slug}`}
       aria-labelledby="featured-title"
-      className="flex scroll-mt-28 flex-col gap-8 border-t border-rule pt-8"
+      className="flex scroll-mt-28 flex-col gap-6 border-t border-rule pt-8"
     >
       <header className="grid gap-x-12 gap-y-6 lg:grid-cols-12">
         <div className="flex min-w-0 flex-col gap-3 lg:col-span-7">
@@ -42,20 +42,21 @@ export function Featured() {
         </dl>
       </header>
 
-      <div className="rounded-lg border border-line p-4 md:p-6">
-        <IngestDiagram />
+      <div className="grid items-center gap-x-10 gap-y-6 lg:grid-cols-12">
+        <div className="min-w-0 lg:col-span-8">
+          <ParsrFigure />
+        </div>
+        <ol className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1">
+          {featured.steps.map((step, i) => (
+            <li key={step.title} className="flex gap-3">
+              <span className="type-mono w-6 shrink-0 pt-0.5 text-muted">{String(i + 1).padStart(2, "0")}</span>
+              <p className="type-small min-w-0 text-muted">
+                <span className="font-semibold text-ink">{step.title}.</span> {step.body}
+              </p>
+            </li>
+          ))}
+        </ol>
       </div>
-
-      <ol className="grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-        {featured.steps.map((step, i) => (
-          <li key={step.title} className="flex gap-3">
-            <span className="type-mono w-6 shrink-0 pt-0.5 text-muted">{String(i + 1).padStart(2, "0")}</span>
-            <p className="type-small min-w-0 text-muted">
-              <span className="font-semibold text-ink">{step.title}.</span> {step.body}
-            </p>
-          </li>
-        ))}
-      </ol>
 
       <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4" aria-label="Screenshots of Parsr">
         {featured.shots.map((shot) => (

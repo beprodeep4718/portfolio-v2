@@ -3,7 +3,7 @@
 Personal site built around one idea: **light in the darkness**, which is what the name Beprodeep means. A lamp carries that light deep into the stack.
 
 - **Hero**: the name set huge with a lamp as its full stop. On a mouse the lamp follows the cursor and warms the letters it passes; a Three.js field of dust motes glows around it. Wherever the light falls it reveals a generated two layer circuit board (chips, buses, passives, vias, silkscreen) with signals and data packets such as `I2C 0x3C` and `GET /api` running along the copper (`src/components/hero/circuit.ts`).
-- **Shipped**: Parsr (repo: StreamIngest) is featured with an animated architecture diagram (upload, BullMQ queue on Redis, streaming worker, three validation layers, batched writes to MongoDB, progress back over SSE) that runs a sample job at its benchmark speed. Below it, an index of more work; rows open to a screenshot and links, and four bars show how far down the stack each project goes.
+- **Shipped**: Parsr (repo: StreamIngest) is featured as an isometric card-sorter machine: a job ticket (BullMQ on Redis) goes to a reader that streams the CSV tape, cards pass three validation gates, failures go to a reject tray and valid cards are filed in batches of 1,000 (MongoDB bulkWrite). Visitors scrub the run with the pointer or arrow keys. Below it, an index of more work; rows open to a screenshot and links, and four bars show how far down the stack each project goes.
 - **How deep I go**: the stack as four layers that get darker with depth. The lamp sinks down the rail as you scroll (GSAP ScrollTrigger).
 - **Now**, **services** and **Say hello**, with a live Jalpaiguri clock.
 - **Light and dark mode**: follows the system setting, remembers the visitor's choice, and is applied before paint so it never flashes.
@@ -26,3 +26,13 @@ All copy, projects, layers and links live in `src/content/site.ts`. Before launc
 3. Set `NEXT_PUBLIC_SITE_URL` to the real domain.
 
 Colors for both themes are CSS variables at the top of `src/app/globals.css`.
+
+## The Parsr figure
+
+The figure is drawn with the [anatomy](https://skills.wheresryan.sh/anatomy) kit (`src/components/iso/`, MIT). Its source is `figures/parsr/`: `model.mjs` holds the numbers and motion, `build.mjs` draws it. After changing either, regenerate the site files:
+
+```bash
+node figures/parsr/build.mjs --emit
+```
+
+This rewrites `src/components/parsr/art.generated.ts` and `live.generated.js`, and a standalone preview at `figures/parsr/parsr.html`. Theme colors for the figure are in `src/components/parsr/parsr.css`.
