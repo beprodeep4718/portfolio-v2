@@ -1,12 +1,14 @@
 import { site } from "@/content/site";
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero/hero";
+import { Prologue } from "@/components/sections/prologue";
 import { Work } from "@/components/sections/work";
 import { Stack } from "@/components/sections/stack";
 import { Now } from "@/components/sections/now";
 import { Services } from "@/components/sections/services";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/footer";
+import { StoryLamp } from "@/components/story/story-lamp";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -26,6 +28,7 @@ export default function Home() {
       <Nav />
       <main id="main" tabIndex={-1} className="outline-none">
         <Hero />
+        <Prologue />
         <Work />
         <Stack />
         <Now />
@@ -33,6 +36,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <StoryLamp />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}

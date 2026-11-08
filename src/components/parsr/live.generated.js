@@ -271,7 +271,7 @@ function draw(t) {
   stage.setAttribute("aria-valuetext", text);
 }
 
-let t = 0, frame = 0, last = 0, touring = true, visible = false, idle = 0, target = 0;
+let t = 0, frame = 0, last = 0, touring = true, visible = false, idle = 0, target = 0, held = false;
 function tick(now) {
   const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
   last = now;
@@ -285,9 +285,20 @@ const steer = (to) => {
   touring = false;
   target = Math.min(SX.end + 0.6, Math.max(0, to));
   clearTimeout(idle);
-  idle = setTimeout(() => { touring = true; run(); }, 3600);
+  idle = setTimeout(() => { if (!held) { touring = true; run(); } }, 3600);
   if (still.matches) { t = target; draw(t); } else run();
 };
+/* The page can hold the run at a point (0 to 1), for example from scroll; null lets it tour again */
+const onScrub = (e) => {
+  const p = e.detail;
+  if (p == null) { if (held) { held = false; touring = true; run(); } return; }
+  held = true;
+  touring = false;
+  clearTimeout(idle);
+  target = Math.min(1, Math.max(0, p)) * (SX.end + 0.6);
+  if (still.matches) { t = target; draw(t); } else run();
+};
+root.addEventListener("parsr:scrub", onScrub);
 const io = new IntersectionObserver((e) => { visible = e[e.length - 1].isIntersecting; if (visible) run(); }, { rootMargin: "120px 0px" });
 io.observe(stage);
 const onMove = (e) => {
@@ -309,7 +320,7 @@ stage.addEventListener("pointermove", onMove);
 stage.addEventListener("keydown", onKey);
 if (still.matches) { touring = false; t = SX.release(22) + 1.4; }
 draw(t);
-const stop = () => { io.disconnect(); cancelAnimationFrame(frame); frame = 0; visible = false; clearTimeout(idle); stage.removeEventListener("pointermove", onMove); stage.removeEventListener("keydown", onKey); };
+const stop = () => { io.disconnect(); cancelAnimationFrame(frame); frame = 0; visible = false; clearTimeout(idle); stage.removeEventListener("pointermove", onMove); stage.removeEventListener("keydown", onKey); root.removeEventListener("parsr:scrub", onScrub); };
 
 return stop;
 }

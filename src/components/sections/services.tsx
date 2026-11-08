@@ -1,20 +1,27 @@
 import { primaryCta, services } from "@/content/site";
 import { buttonClass } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { RevealText } from "@/components/story/reveal-text";
+import { RiseGroup } from "@/components/story/rise-group";
 
 export function Services() {
   return (
-    <section id="services" aria-labelledby="services-title" className="container-page flex flex-wrap gap-x-16 gap-y-10 py-20">
+    <section
+      id="services"
+      data-chapter="services"
+      aria-labelledby="services-title"
+      className="container-page flex flex-wrap gap-x-16 gap-y-10 py-20"
+    >
       <div className="flex min-w-0 flex-[1_1_380px] flex-col items-start gap-6">
         <h2 id="services-title" className="display-section text-ink">
-          {services.heading}
+          <RevealText>{services.heading}</RevealText>
         </h2>
         <a href={primaryCta.href} className={buttonClass("primary")}>
           {primaryCta.label}
         </a>
       </div>
 
-      <ul className="flex min-w-0 flex-[2_1_560px] flex-col border-b border-line">
+      <RiseGroup as="ul" className="flex min-w-0 flex-[2_1_560px] flex-col border-b border-line">
         {services.items.map((item, i) => (
           <li
             key={item.title}
@@ -24,7 +31,7 @@ export function Services() {
             <p className="type-body min-w-0 flex-[2_1_300px] text-muted">{item.body}</p>
           </li>
         ))}
-      </ul>
+      </RiseGroup>
     </section>
   );
 }

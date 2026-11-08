@@ -3,8 +3,11 @@
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { hero, primaryCta, site } from "@/content/site";
 import { buttonClass } from "@/components/ui/button";
+import { lampStore } from "@/components/story/lamp-store";
 import type { LampState } from "./lamp-field";
 import { CircuitReveal } from "./circuit-reveal";
 
@@ -15,13 +18,15 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 /**
  * The lamp is the full stop of the name. On a mouse it follows the cursor
  * around the hero, warming the letters it passes, and settles back as the
- * full stop when the cursor leaves.
+ * full stop when the cursor leaves. The story lamp draws it and carries it
+ * off down the page when you scroll; wherever it is, the letters and the
+ * circuit board under it stay lit.
  */
 export function Hero() {
   const section = useRef<HTMLElement>(null);
   const dock = useRef<HTMLSpanElement>(null);
-  const floating = useRef<HTMLSpanElement>(null);
   const lit = useRef<HTMLSpanElement>(null);
+  const content = useRef<HTMLDivElement>(null);
   const lamp = useRef<LampState>({ x: 0, y: 0, size: 0, ready: false });
   const [running, setRunning] = useState(true);
   const reduce = useReducedMotion() ?? false;
@@ -39,9 +44,8 @@ export function Hero() {
   useEffect(() => {
     const el = section.current;
     const d = dock.current;
-    const f = floating.current;
     const o = lit.current;
-    if (!el || !d || !f || !o || !running) return;
+    if (!el || !d || !o || !running) return;
 
     const carry = window.matchMedia("(pointer: fine)").matches && !reduce;
     const pointer = { x: 0, y: 0, inside: false };
@@ -75,20 +79,28 @@ export function Hero() {
         pos.x = tx;
         pos.y = ty;
         pos.started = true;
-        el.dataset.lampReady = "true";
       }
       const k = pointer.inside ? 0.14 : 0.09;
       pos.x += (tx - pos.x) * k;
       pos.y += (ty - pos.y) * k;
 
-      f.style.width = `${size}px`;
-      f.style.height = `${size}px`;
-      f.style.transform = `translate3d(${pos.x - size / 2}px, ${pos.y - size / 2}px, 0)`;
-      o.style.setProperty("--lx", `${pos.x - (or.left - r.left)}px`);
-      o.style.setProperty("--ly", `${pos.y - (or.top - r.top)}px`);
+      /* Where the lamp rests, for the story lamp to draw and carry */
+      const home = lampStore.home;
+      home.x = pos.x;
+      home.y = pos.y;
+      home.size = size;
+      home.el = el;
+      home.ready = true;
 
-      lamp.current.x = pos.x;
-      lamp.current.y = pos.y;
+      /* Light whatever is under the lamp, even once it has started down the page */
+      const final = lampStore.final;
+      const lx = final.active ? final.x - r.left : pos.x;
+      const ly = final.active ? final.y - r.top : pos.y;
+      o.style.setProperty("--lx", `${lx - (or.left - r.left)}px`);
+      o.style.setProperty("--ly", `${ly - (or.top - r.top)}px`);
+
+      lamp.current.x = lx;
+      lamp.current.y = ly;
       lamp.current.size = size;
       lamp.current.ready = true;
 
@@ -108,6 +120,24 @@ export function Hero() {
       el.removeEventListener("pointerleave", onLeave);
     };
   }, [running, reduce]);
+
+  /* With the light gone down the page, the name sinks back into the dark */
+  useEffect(() => {
+    const el = section.current;
+    const c = content.current;
+    if (!el || !c || reduce) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const tween = gsap.to(c, {
+      opacity: 0.35,
+      ease: "none",
+      scrollTrigger: { trigger: el, start: "top top", end: "+=640", scrub: true },
+    });
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+      gsap.set(c, { clearProps: "opacity" });
+    };
+  }, [reduce]);
 
   const rise = (delay: number) => ({
     initial: { opacity: 0, y: reduce ? 0 : 32 },
@@ -130,21 +160,15 @@ export function Hero() {
         <LampField lamp={lamp} reducedMotion={reduce} running={running} />
       </div>
 
-      {/* The floating lamp: sits on the full stop until the cursor carries it */}
-      <span
-        ref={floating}
-        aria-hidden="true"
-        className="lamp pointer-events-none absolute top-0 left-0 z-20 opacity-0 transition-opacity duration-500 group-data-[lamp-ready=true]/hero:opacity-100"
-      />
-
-      <div className="container-page flex flex-col gap-9 pt-14 pb-22">
+      <div ref={content} className="container-page flex flex-col gap-9 pt-14 pb-22">
         <motion.div {...rise(0.1)} className="relative">
           <h1 id="hero-name" className="display-name relative text-ink">
             {site.name}
             <span
               ref={dock}
               aria-hidden="true"
-              className="lamp ml-[0.05em] size-[0.16em] group-data-[lamp-ready=true]/hero:invisible"
+              data-dock="hero"
+              className="lamp ml-[0.05em] size-[0.16em]"
             />
           </h1>
           {/* Same text, lit only around the lamp */}
@@ -168,7 +192,6 @@ export function Hero() {
           className="flex flex-wrap items-start gap-x-12 gap-y-8 border-t border-rule pt-8"
         >
           <p className="type-lead min-w-0 flex-[2_1_400px] text-ink">{hero.lead}</p>
-          <p className="type-body-sm min-w-0 flex-[1_1_240px] text-muted">{hero.nameNote}</p>
           <div className="type-small flex min-w-0 flex-[1_1_200px] flex-col gap-1 text-muted">
             <span className="font-semibold text-ink">Now</span>
             {hero.now.map((line) => (

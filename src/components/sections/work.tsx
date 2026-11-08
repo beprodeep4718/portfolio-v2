@@ -6,6 +6,8 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { projects } from "@/content/site";
 import { cn } from "@/lib/cn";
 import { DepthBars } from "@/components/ui/depth-bars";
+import { RevealText } from "@/components/story/reveal-text";
+import { RiseGroup } from "@/components/story/rise-group";
 import { Featured } from "./featured";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -29,10 +31,15 @@ export function Work() {
   const reduce = useReducedMotion();
 
   return (
-    <section id="work" aria-labelledby="work-title" className="container-page flex flex-col gap-6 pt-18 pb-24">
+    <section
+      id="work"
+      data-chapter="work"
+      aria-labelledby="work-title"
+      className="container-page flex flex-col gap-6 pt-18 pb-24"
+    >
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
         <h2 id="work-title" className="display-section text-ink">
-          Shipped
+          <RevealText>Shipped</RevealText>
         </h2>
         <p className="type-small max-w-[420px] text-muted">
           The featured build comes first, with how it works inside. The four bars show how far down the stack each
@@ -43,7 +50,7 @@ export function Work() {
       <Featured />
 
       <h3 className="type-item mt-10 text-ink">More work</h3>
-      <ol className="border-t border-rule">
+      <RiseGroup as="ol" className="border-t border-rule">
         {projects.map((p, i) => {
           const isOpen = open === p.slug;
           const panelId = `work-${p.slug}-panel`;
@@ -132,7 +139,7 @@ export function Work() {
             </li>
           );
         })}
-      </ol>
+      </RiseGroup>
     </section>
   );
 }

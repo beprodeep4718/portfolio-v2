@@ -27,6 +27,10 @@
   --bar-off: #e1e1e1;
   --halo: rgba(255, 122, 26, 0.11);
   --focus: #0b0b0c;
+  /* The lamp's colour on words it is lighting right now */
+  --lamp-text: #c2530a;
+  /* The rail the lamp rides down the page; neutral so it reads on light and dark layers */
+  --rail: rgba(142, 149, 163, 0.34);
 
   /* Stack layers get darker as they go deeper */
   --l1: #f3f4f5;
@@ -60,6 +64,7 @@
   --bar-off: #2a303c;
   --halo: rgba(255, 122, 26, 0.2);
   --focus: #ff7a1a;
+  --lamp-text: #ff9442;
 
   --l1: #10141c;
   --l1-ink: #edebe7;
@@ -94,6 +99,8 @@
   --color-bar: var(--bar);
   --color-bar-off: var(--bar-off);
   --color-lamp: var(--lamp);
+  --color-lamp-text: var(--lamp-text);
+  --color-rail: var(--rail);
 
   --color-l1: var(--l1);
   --color-l1-ink: var(--l1-ink);
@@ -133,6 +140,12 @@
 @utility display-section {
   font-size: clamp(40px, 5vw, 64px);
   line-height: 1;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+}
+@utility display-statement {
+  font-size: clamp(40px, 6vw, 84px);
+  line-height: 1.04;
   letter-spacing: -0.045em;
   font-weight: 700;
 }
@@ -222,6 +235,24 @@
   background-clip: text;
 }
 
+/* Heading text rises into view from behind its own baseline */
+@utility reveal-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.04em 0.14em;
+  margin: 0 -0.04em -0.14em;
+}
+
+/* While the story lamp is running it is the one lamp on screen: the docks it
+   rests in hide, and the contact dock fades in as the lamp lands there */
+[data-story="on"] [data-dock="hero"] {
+  visibility: hidden;
+}
+[data-story="on"] [data-dock="contact"] {
+  opacity: 0;
+}
+
 @utility container-page {
   width: 100%;
   max-width: 1320px;
@@ -247,18 +278,17 @@
   html {
     background: var(--bg);
     -webkit-tap-highlight-color: transparent;
+    transition: background-color 400ms var(--ease-smooth);
   }
 
+  /* No background of its own, so the lamp's light can sit behind the content */
   body {
-    background: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
-    transition:
-      background-color 400ms var(--ease-smooth),
-      color 400ms var(--ease-smooth);
+    transition: color 400ms var(--ease-smooth);
   }
 
   h1,

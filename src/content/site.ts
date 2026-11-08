@@ -37,12 +37,33 @@ export const primaryCta = {
 
 export const hero = {
   lead: "I build the interface you see and the systems underneath it, from React on the surface down to queues and containers.",
-  nameNote: "My name means light in the darkness. Most of my work happens deep in the stack, where a little light goes a long way.",
   now: ["SDE intern at MindWebs Ventures", "Final year, B.Tech ECE at JGEC"],
   availability: "Open to freelance work",
   hintPointer: "Move your cursor to carry the light and see what runs underneath.",
   hintScroll: "Scroll and it goes down into the stack.",
 };
+
+/** Held on screen while it lights up, line by line, between the hero and the work */
+export const prologue = {
+  label: "Prologue",
+  lines: [
+    "My name means light in the darkness.",
+    "Most of my work happens deep in the stack,",
+    "where a little light goes a long way.",
+  ],
+};
+
+/** The chapter the lamp is in, shown beside it on its rail (wide screens only) */
+export const chapters = {
+  prologue: "Prologue",
+  work: "01 · Shipped",
+  stack: "02 · How deep I go",
+  now: "03 · Now",
+  services: "04 · Services",
+  contact: "05 · Say hello",
+} as const;
+
+export type ChapterId = keyof typeof chapters;
 
 export type Project = {
   slug: string;
@@ -139,11 +160,32 @@ export const featured = {
   ],
 };
 
+/** Each tool shows with its logo; a new tool needs a mark in components/ui/tech-logo.tsx */
 export const layers = [
-  { depth: "01", title: "Interface", what: "What people see and touch.", tools: "Next.js, React, TypeScript, Tailwind CSS and GSAP" },
-  { depth: "02", title: "Application", what: "Where the rules live.", tools: "Node.js, Express, REST APIs, Socket.io and JWT auth" },
-  { depth: "03", title: "Data", what: "What has to be remembered.", tools: "MongoDB, Mongoose, Redis and Cloudinary" },
-  { depth: "04", title: "Infrastructure", what: "What keeps it all running at 3 a.m.", tools: "Docker, RabbitMQ, job queues, Render and Vercel" },
+  {
+    depth: "01",
+    title: "Interface",
+    what: "What people see and touch.",
+    tools: ["Next.js", "React", "TypeScript", "Tailwind CSS", "GSAP"],
+  },
+  {
+    depth: "02",
+    title: "Application",
+    what: "Where the rules live.",
+    tools: ["Node.js", "Express", "REST APIs", "Socket.io", "JWT auth"],
+  },
+  {
+    depth: "03",
+    title: "Data",
+    what: "What has to be remembered.",
+    tools: ["MongoDB", "Mongoose", "Redis", "Cloudinary"],
+  },
+  {
+    depth: "04",
+    title: "Infrastructure",
+    what: "What keeps it all running at 3 a.m.",
+    tools: ["Docker", "RabbitMQ", "job queues", "Render", "Vercel"],
+  },
 ];
 
 export const now = {
