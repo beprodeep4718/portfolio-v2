@@ -22,7 +22,12 @@ export function Contact() {
   const photo = site.photo.src ? site.photo : null;
 
   return (
-    <section id="contact" data-chapter="contact" aria-labelledby="contact-title" className="relative isolate">
+    <section
+      id="contact"
+      data-chapter="contact"
+      aria-labelledby="contact-title"
+      className={cn("relative isolate", photo && "lg:min-h-[calc(min(560px,40vw)*1.25_+_140px)]")}
+    >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute top-0 left-[22%] -z-10 aspect-square w-[640px] max-w-[80vw] rounded-full bg-[radial-gradient(circle,var(--halo)_0%,transparent_62%)]"
@@ -34,8 +39,26 @@ export function Contact() {
           <span aria-hidden="true" data-dock="contact" className="lamp ml-[0.05em] size-[0.16em]" />
         </h2>
 
+        {/* The last thing the lamp lights. On a wide screen it stands large behind Say hello and shows only
+            inside the lamp's circle of light as the lamp lands; on a phone it sits between the heading and the message. */}
+        {photo ? (
+          <div
+            data-lamp-lit
+            className="lamp-photo lamp-photo-reveal relative -z-10 aspect-[4/5] w-full max-w-md overflow-hidden lg:absolute lg:top-[70px] lg:right-[max(32px,calc((100%_-_1320px)/2_+_32px))] lg:w-[min(560px,40vw)] lg:max-w-none xl:right-[max(40px,calc((100%_-_1320px)/2_+_40px))]"
+          >
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              fill
+              sizes="(min-width: 1024px) 560px, 448px"
+              className="lamp-photo-image object-cover object-[58%_30%]"
+            />
+            <span aria-hidden="true" className="lamp-photo-warm absolute inset-0" />
+          </div>
+        ) : null}
+
         <div className={cn("grid items-start gap-x-12 gap-y-8 border-t border-rule pt-8", photo && "lg:grid-cols-12")}>
-          <div className={cn("flex min-w-0 flex-col gap-8", photo && "lg:col-span-8")}>
+          <div className={cn("flex min-w-0 flex-col gap-8", photo && "lg:col-span-7")}>
             <div className="flex flex-wrap items-center gap-x-12 gap-y-6">
               <LitText text={contact.body} className="type-body-lg min-w-0 flex-[1_1_420px] text-muted" />
               {hasEmail ? (
@@ -76,25 +99,6 @@ export function Contact() {
               })}
             </RiseGroup>
           </div>
-
-          {/* The last thing the lamp lights: dark until it lands on the full stop above, then lit from its side.
-              On a phone it comes first, between the heading and the message. */}
-          {photo ? (
-            <figure className="order-first m-0 flex w-full max-w-sm flex-col gap-3 lg:order-none lg:col-span-4 lg:max-w-none">
-              <div data-lamp-lit className="lamp-photo relative aspect-[4/5] overflow-hidden rounded-md bg-[#0d1017]">
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  sizes="(min-width: 1024px) 400px, 384px"
-                  className="lamp-photo-image object-cover"
-                />
-                <span aria-hidden="true" className="lamp-photo-warm absolute inset-0" />
-                <span aria-hidden="true" className="lamp-photo-shade absolute inset-0" />
-              </div>
-              <figcaption className="type-mono text-muted">{photo.caption}</figcaption>
-            </figure>
-          ) : null}
         </div>
       </div>
     </section>

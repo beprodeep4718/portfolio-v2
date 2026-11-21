@@ -34,6 +34,8 @@
   /* The dock floating at the foot of the screen */
   --dock: rgba(255, 255, 255, 0.82);
   --dock-shadow: 0 1px 2px rgba(11, 11, 12, 0.06), 0 16px 40px rgba(11, 11, 12, 0.12);
+  /* How bright the photo at Say hello gets once fully lit, on top of 0.2 */
+  --photo-lift: 0.72;
 
   /* Stack layers get darker as they go deeper */
   --l1: #f3f4f5;
@@ -70,6 +72,7 @@
   --lamp-text: #ff9442;
   --dock: rgba(16, 20, 28, 0.74);
   --dock-shadow: inset 0 1px 0 rgba(237, 235, 231, 0.05), 0 18px 48px rgba(0, 0, 0, 0.6);
+  --photo-lift: 0.5;
 
   --l1: #10141c;
   --l1-ink: #edebe7;
@@ -259,16 +262,34 @@
   opacity: 0;
 }
 
-/* A photo lit by the story lamp. --lit runs from 0 (in the dark) to 1 (lit) and
+/* The photo at Say hello, lit by the story lamp. --lit runs from 0 (in the dark) to 1 (lit) and
    --lx/--ly is where the lamp is; the story lamp sets all three as it lands.
    Without it (reduced motion, no script) the photo simply shows lit. */
 @utility lamp-photo {
   --lit: 1;
-  --lx: 0%;
-  --ly: 0%;
+  --lx: 30%;
+  --ly: 10%;
 }
+/* It only shows inside the lamp's circle of light, which opens as the lamp lands, and its edges
+   feather into whatever is behind, most of all below and, on a wide screen, on the heading's side */
+@utility lamp-photo-reveal {
+  --reach: calc(1px + 1000px * var(--lit));
+  --light: radial-gradient(circle var(--reach) at var(--lx) var(--ly), #000 0%, #000 34%, transparent 100%);
+  --fade-y: linear-gradient(to bottom, transparent, #000 8%, #000 62%, transparent);
+  --fade-x: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  @media (width >= 64rem) {
+    --fade-y: linear-gradient(to bottom, transparent, #000 10%, #000 70%, transparent);
+    --fade-x: linear-gradient(to right, transparent, #000 38%, #000 88%, transparent);
+  }
+  -webkit-mask-image: var(--light), var(--fade-y), var(--fade-x);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--light), var(--fade-y), var(--fade-x);
+  mask-composite: intersect;
+}
+/* A low, warm grade: dim and muted, so the lamp stays the brightest thing on it */
 @utility lamp-photo-image {
-  filter: brightness(calc(0.12 + 0.88 * var(--lit))) saturate(calc(0.15 + 0.85 * var(--lit)));
+  filter: brightness(calc(0.2 + var(--photo-lift) * var(--lit))) contrast(1.1)
+    saturate(calc(0.2 + 0.5 * var(--lit))) sepia(0.18);
 }
 @utility lamp-photo-warm {
   background: radial-gradient(
@@ -279,9 +300,6 @@
   );
   mix-blend-mode: soft-light;
   opacity: calc(0.1 + 0.8 * var(--lit));
-}
-@utility lamp-photo-shade {
-  box-shadow: inset 0 0 140px rgba(0, 0, 0, calc(0.78 - 0.5 * var(--lit)));
 }
 
 @utility container-page {

@@ -18,14 +18,12 @@ export const site = {
   email: "" as string,
 
   /**
-   * TODO: your photo, shown beside the contact details and lit by the lamp as it lands.
-   * Put it in /public (upright, about 4:5, at least 1200px wide) and set src, e.g. "/me.jpg".
-   * Until src is set, no photo is shown.
+   * Your photo, standing large behind Say hello and revealed by the lamp as it lands.
+   * Upright, about 3:4 or 4:5, at least 1200px wide, in /public. Set src to "" to hide it.
    */
   photo: {
-    src: "" as string,
-    alt: "Portrait of Beprodeep Das",
-    caption: "Beprodeep Das · Jalpaiguri, West Bengal",
+    src: "/me.jpg" as string,
+    alt: "Beprodeep Das in a brown shirt and sunglasses, leaning on the pillar of an old building",
   },
 
   socials: [
