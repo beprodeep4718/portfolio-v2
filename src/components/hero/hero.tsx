@@ -161,59 +161,67 @@ export function Hero() {
         <LampField lamp={lamp} reducedMotion={reduce} running={running} />
       </div>
 
-      <div ref={content} className="container-page flex flex-col gap-9 pt-6 pb-22 md:pt-8">
+      {/* Fills the first screen, so nothing below peeks out under the dock; the
+          bottom padding keeps the last row clear of it */}
+      <div ref={content} className="container-page flex min-h-svh flex-col gap-6 pt-6 pb-24 md:gap-9 md:pt-8 md:pb-32">
         {/* What used to sit in the top bar: the role and the time in Jalpaiguri */}
-        <motion.p {...rise(0)} className="type-mono flex flex-wrap justify-between gap-x-6 gap-y-1 text-muted">
+        <motion.p {...rise(0)} className="type-mono flex flex-wrap justify-between gap-x-4 gap-y-1 text-muted">
           <span>{hero.role}</span>
           <span>
             Jalpaiguri <Clock /> IST
           </span>
         </motion.p>
 
-        <motion.div {...rise(0.1)} className="relative">
-          <h1 id="hero-name" className="display-name relative text-ink">
-            {site.name}
+        <div className="mt-auto flex flex-col gap-6 md:gap-9">
+          <motion.div {...rise(0.1)} className="relative">
+            <h1 id="hero-name" className="display-name relative text-ink">
+              {site.name}
+              <span
+                ref={dock}
+                aria-hidden="true"
+                data-dock="hero"
+                className="lamp ml-[0.05em] size-[0.16em]"
+              />
+            </h1>
+            {/* Same text, lit only around the lamp */}
             <span
-              ref={dock}
               aria-hidden="true"
-              data-dock="hero"
-              className="lamp ml-[0.05em] size-[0.16em]"
-            />
-          </h1>
-          {/* Same text, lit only around the lamp */}
-          <span
-            aria-hidden="true"
-            className="display-name lit-text pointer-events-none absolute inset-x-0 top-0 -bottom-[0.3em] select-none"
-            ref={lit}
+              className="display-name lit-text pointer-events-none absolute inset-x-0 top-0 -bottom-[0.3em] select-none"
+              ref={lit}
+            >
+              {site.name}
+              <span className="ml-[0.05em] inline-block size-[0.16em]" />
+            </span>
+          </motion.div>
+
+          {/* Dropped on short phones, where it would push the last row under the dock */}
+          <motion.p
+            {...rise(0.25)}
+            className="type-mono -mt-3 text-muted [@media(max-width:767px)_and_(max-height:700px)]:hidden"
           >
-            {site.name}
-            <span className="ml-[0.05em] inline-block size-[0.16em]" />
-          </span>
-        </motion.div>
+            <span className="pointer-coarse:hidden">{hero.hintPointer} </span>
+            {hero.hintScroll}
+          </motion.p>
 
-        <motion.p {...rise(0.25)} className="type-mono -mt-3 text-muted">
-          <span className="pointer-coarse:hidden">{hero.hintPointer} </span>
-          {hero.hintScroll}
-        </motion.p>
-
-        <motion.div
-          {...rise(0.35)}
-          className="flex flex-wrap items-start gap-x-12 gap-y-8 border-t border-rule pt-8"
-        >
-          <p className="type-lead min-w-0 flex-[2_1_400px] text-ink">{hero.lead}</p>
-          <div className="type-small flex min-w-0 flex-[1_1_200px] flex-col gap-1 text-muted">
-            <span className="font-semibold text-ink">Now</span>
-            {hero.now.map((line) => (
-              <span key={line}>{line}</span>
-            ))}
-          </div>
-          <div className="flex min-w-0 flex-[1_1_200px] flex-col items-start gap-3">
-            <a href={primaryCta.href} className={buttonClass("primary")}>
-              {primaryCta.label}
-            </a>
-            <span className="type-small text-muted">{hero.availability}</span>
-          </div>
-        </motion.div>
+          <motion.div
+            {...rise(0.35)}
+            className="flex flex-wrap items-start gap-x-12 gap-y-6 border-t border-rule pt-6 md:gap-y-8 md:pt-8"
+          >
+            <p className="type-lead min-w-0 flex-[2_1_400px] text-ink">{hero.lead}</p>
+            <div className="type-small flex min-w-0 flex-[1_1_200px] flex-col gap-1 text-muted">
+              <span className="font-semibold text-ink">Now</span>
+              {hero.now.map((line) => (
+                <span key={line}>{line}</span>
+              ))}
+            </div>
+            <div className="flex min-w-0 flex-[1_1_200px] flex-col items-start gap-3">
+              <a href={primaryCta.href} className={buttonClass("primary")}>
+                {primaryCta.label}
+              </a>
+              <span className="type-small text-muted">{hero.availability}</span>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
