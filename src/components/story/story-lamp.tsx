@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { chapters, type ChapterId } from "@/content/site";
 import { lampStore } from "./lamp-store";
-import { MOTION, NAV_H, clamp01, contentLeft, easeInOut } from "./paint";
+import { MOTION, clamp01, contentLeft, easeInOut } from "./paint";
 
 /** How far you scroll before the lamp has left the name and reached its rail */
 const LEAVE = 440;
@@ -142,7 +142,7 @@ export function StoryLamp() {
         set(r, "rt", "transform", `translateX(${railX - 0.5}px)`);
         set(r, "ro", "opacity", railOn);
         set(t, "tt", "transform", `translateX(${railX - 0.5}px)`);
-        set(t, "th", "height", `${Math.max(0, ly - NAV_H).toFixed(1)}px`);
+        set(t, "th", "height", `${Math.max(0, ly).toFixed(1)}px`);
         set(t, "to", "opacity", railOn);
 
         /* The chapter the reading line is in, written up the rail above the lamp */
@@ -236,10 +236,10 @@ export function StoryLamp() {
         />
       </div>
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-30 overflow-hidden">
-        <span ref={rail} className="absolute top-19 bottom-0 left-0 w-px bg-rail opacity-0" />
+        <span ref={rail} className="absolute top-0 bottom-0 left-0 w-px bg-rail opacity-0" />
         <span
           ref={trail}
-          className="absolute top-19 left-0 h-0 w-px bg-[linear-gradient(to_bottom,transparent,var(--lamp))] opacity-0"
+          className="absolute top-0 left-0 h-0 w-px bg-[linear-gradient(to_bottom,transparent,var(--lamp))] opacity-0"
         />
         <span
           ref={label}

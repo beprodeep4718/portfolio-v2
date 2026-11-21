@@ -1,7 +1,7 @@
 /** Small helpers shared by the scroll story. No React here, so any client module can use them. */
 
-/** Height of the sticky header; pinned scenes sit just below it */
-export const NAV_H = 76;
+/** Room the floating dock takes at the foot of the screen; pinned scenes stay clear of it */
+export const DOCK_H = 96;
 
 export const MOTION = "(prefers-reduced-motion: no-preference)";
 

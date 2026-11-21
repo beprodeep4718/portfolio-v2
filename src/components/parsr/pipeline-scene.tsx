@@ -4,7 +4,7 @@ import { useRef, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { MOTION, NAV_H, clamp01, clearWords, countText, easeOut, paintWords, passage } from "@/components/story/paint";
+import { MOTION, DOCK_H, clamp01, clearWords, countText, easeOut, paintWords, passage } from "@/components/story/paint";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -12,7 +12,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 const HOLD = "(min-width: 1024px) and (min-height: 760px)";
 
 /**
- * Parsr's chapter. On a large screen it is held below the header while you
+ * Parsr's chapter. On a large screen it is held above the dock while you
  * scroll: the summary lights up, a row of data travels down the six steps as
  * the card sorter runs to match, and the results count up at the end. On
  * smaller screens each part plays as it passes. Reduced motion: all still.
@@ -97,7 +97,7 @@ export function PipelineScene({ children }: { children: ReactNode }) {
       };
 
       const held = () => {
-        gsap.set(el, { minHeight: `calc(100svh - ${NAV_H}px)`, display: "flex", alignItems: "center" });
+        gsap.set(el, { minHeight: `calc(100svh - ${DOCK_H}px)`, display: "flex", alignItems: "center" });
         let lastQ = -1;
         const paint = (self: ScrollTrigger) => {
           const p = self.progress;
@@ -112,7 +112,7 @@ export function PipelineScene({ children }: { children: ReactNode }) {
         };
         const trigger = ScrollTrigger.create({
           trigger: el,
-          start: `top ${NAV_H}px`,
+          start: "top top",
           end: () => `+=${Math.round(window.innerHeight * 2.2)}`,
           pin: true,
           pinSpacing: true,
@@ -183,8 +183,8 @@ export function PipelineScene({ children }: { children: ReactNode }) {
       mm.add({ motion: MOTION, hold: HOLD }, (ctx) => {
         const { motion, hold } = ctx.conditions as { motion: boolean; hold: boolean };
         if (!motion) return;
-        /* Hold it only if the whole scene fits under the header */
-        const fits = inner.offsetHeight <= window.innerHeight - NAV_H - 24;
+        /* Hold it only if the whole scene fits above the dock */
+        const fits = inner.offsetHeight <= window.innerHeight - DOCK_H - 24;
         return hold && fits ? held() : passing();
       });
       return () => mm.revert();

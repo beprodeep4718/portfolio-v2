@@ -47,6 +47,7 @@ export const primaryCta = {
 };
 
 export const hero = {
+  role: "Full stack engineer",
   lead: "I build the interface you see and the systems underneath it, from React on the surface down to queues and containers.",
   now: ["SDE intern at MindWebs Ventures", "Final year, B.Tech ECE at JGEC"],
   availability: "Open to freelance work",

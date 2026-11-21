@@ -1,5 +1,5 @@
 import { site } from "@/content/site";
-import { Nav } from "@/components/nav";
+import { Dock } from "@/components/dock";
 import { Hero } from "@/components/hero/hero";
 import { Prologue } from "@/components/sections/prologue";
 import { Work } from "@/components/sections/work";
@@ -25,7 +25,7 @@ const jsonLd = {
 export default function Home() {
   return (
     <>
-      <Nav />
+      <Dock />
       <main id="main" tabIndex={-1} className="outline-none">
         <Hero />
         <Prologue />

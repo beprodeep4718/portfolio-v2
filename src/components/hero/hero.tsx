@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { hero, primaryCta, site } from "@/content/site";
 import { buttonClass } from "@/components/ui/button";
 import { lampStore } from "@/components/story/lamp-store";
+import { Clock } from "@/components/clock";
 import type { LampState } from "./lamp-field";
 import { CircuitReveal } from "./circuit-reveal";
 
@@ -160,7 +161,15 @@ export function Hero() {
         <LampField lamp={lamp} reducedMotion={reduce} running={running} />
       </div>
 
-      <div ref={content} className="container-page flex flex-col gap-9 pt-14 pb-22">
+      <div ref={content} className="container-page flex flex-col gap-9 pt-6 pb-22 md:pt-8">
+        {/* What used to sit in the top bar: the role and the time in Jalpaiguri */}
+        <motion.p {...rise(0)} className="type-mono flex flex-wrap justify-between gap-x-6 gap-y-1 text-muted">
+          <span>{hero.role}</span>
+          <span>
+            Jalpaiguri <Clock /> IST
+          </span>
+        </motion.p>
+
         <motion.div {...rise(0.1)} className="relative">
           <h1 id="hero-name" className="display-name relative text-ink">
             {site.name}
